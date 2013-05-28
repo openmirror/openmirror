@@ -1,0 +1,2 @@
+serviceClass: com.openmirrorapi.client.OpenMirrorApiService
+path: 4EBC0593FB3067B5012F2FF5CAD61192.gwt.rpc
