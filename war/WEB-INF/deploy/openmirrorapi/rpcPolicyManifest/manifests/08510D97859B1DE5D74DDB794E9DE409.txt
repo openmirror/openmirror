@@ -1,2 +1,0 @@
-serviceClass: com.lamboratory.openmirrorapi.client.OpenMirrorApiService
-path: 8B1F7817F2F3F41F1CE50AA59CFB04C5.gwt.rpc
