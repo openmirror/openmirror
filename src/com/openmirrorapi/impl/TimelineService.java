@@ -1,5 +1,6 @@
 package com.openmirrorapi.impl;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -27,9 +28,10 @@ public class TimelineService {
 	}
 	
 	@POST
+	@Consumes("application/json")
 	@Produces("application/json")
-	public String postTimelineItem() {
-		return "Hello World!";
+	public TimelineResource postTimelineItem(TimelineResource timelineResource) {
+		return timelineResource;
 	}
 	
 	@DELETE
