@@ -7,6 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 import com.openmirrorapi.resource.AttachmentResource;
 import com.openmirrorapi.resource.AttachmentsList;
@@ -16,7 +17,7 @@ public class AttachmentService {
 
 	// get -> https://developers.google.com/glass/v1/reference/timeline/attachments/get
 	@GET
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{attachmentId}")
 	public AttachmentResource getAttachmentResource(@PathParam("itemId") String itemId, @PathParam("attachmentId") String attachmentId) {
 		AttachmentResource attachmentResource = new AttachmentResource();
@@ -27,7 +28,7 @@ public class AttachmentService {
 	
 	// delete -> https://developers.google.com/glass/v1/reference/timeline/attachments/delete
 	@DELETE
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{attachmentId}")
 	public String deleteAttachmentResource(@PathParam("itemId") String itemId, @PathParam("attachmentId") String attachmentId) {
 		return "@DELETE - itemId["+ itemId +"] - attachmentId["+ attachmentId +"]";
@@ -35,7 +36,7 @@ public class AttachmentService {
 	
 	// insert -> https://developers.google.com/glass/v1/reference/timeline/attachments/insert
 	@POST
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public AttachmentResource insertAttachment(@PathParam("itemId") String itemId, @QueryParam("uploadType") String uploadType) {
 		AttachmentResource attachmentResource = new AttachmentResource();
 		attachmentResource.setContentType(uploadType);
@@ -45,7 +46,7 @@ public class AttachmentService {
 	
 	// list -> https://developers.google.com/glass/v1/reference/timeline/attachments/list
 	@GET
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public AttachmentsList listAttachmentResources(@PathParam("itemId") String itemId) {
 		AttachmentResource[] attachmentResourceList = new AttachmentResource[1];
 		

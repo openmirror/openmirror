@@ -4,6 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import com.openmirrorapi.resource.LocationResource;
 import com.openmirrorapi.resource.LocationsList;
@@ -13,7 +14,7 @@ public class LocationService {
 
 	// get -> https://developers.google.com/glass/v1/reference/locations/get
 	@GET
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public LocationResource getLocationResource(@PathParam("id") String id) {
 		LocationResource locationResource = new LocationResource();
@@ -24,7 +25,7 @@ public class LocationService {
 	
 	// list -> https://developers.google.com/glass/v1/reference/locations/list
 	@GET
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public LocationsList listLocationResource() {
 		LocationResource[] locationResourcesList = new LocationResource[1];
 		
