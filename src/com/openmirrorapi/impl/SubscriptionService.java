@@ -63,7 +63,6 @@ public class SubscriptionService {
 	// update -> https://developers.google.com/glass/v1/reference/subscriptions/update
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	
 	@Path("{id}")
 //	public SubscriptionResource updateSubscriptionResource(@PathParam("id") String id, SubscriptionResource subscriptionResource) {
 	public Response updateSubscriptionResource(@PathParam("id") String id, SubscriptionResource subscriptionResource) {

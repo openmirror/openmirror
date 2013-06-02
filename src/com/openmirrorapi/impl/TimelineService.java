@@ -11,12 +11,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+
 import com.openmirrorapi.resource.TimelineList;
 import com.openmirrorapi.resource.TimelineResource;
 
 @Path("/timeline")
 public class TimelineService {
-	
+
 	// get -> https://developers.google.com/glass/v1/reference/timeline/get
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -51,7 +52,7 @@ public class TimelineService {
 //		return "Hello World!";
 		return Response.ok().build();
 	}
-	
+
 	// list -> https://developers.google.com/glass/v1/reference/timeline/list
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
