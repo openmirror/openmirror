@@ -36,6 +36,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Jersey Web Application</servlet-name>
+    <url-pattern>/upload/mirror/v1/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Jersey Web Application</servlet-name>
     <url-pattern>/mirror/latest/*</url-pattern>
   </servlet-mapping>
   <servlet>
