@@ -1,5 +1,6 @@
 package com.openmirrorapi.impl;
 
+import javax.jdo.PersistenceManager;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,7 +13,7 @@ import javax.ws.rs.core.Response;
 
 import com.openmirrorapi.resource.SubscriptionResource;
 import com.openmirrorapi.resource.SubscriptionsList;
-import com.sun.org.apache.bcel.internal.generic.ReturnaddressType;
+import com.openmirrorapi.server.db.PMF;
 
 @Path("/subscriptions")
 public class SubscriptionService {
@@ -21,27 +22,37 @@ public class SubscriptionService {
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
-//	public String deleteSubscriptionResource(@PathParam("id") String id) {
 	public Response deleteSubscriptionResource(@PathParam("id") String id) {
 
-//		return "@DELETE - itemId["+ id +"]";
 		return Response.ok().build();
 	}
 
 	// insert -> https://developers.google.com/glass/v1/reference/subscriptions/insert
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-//	public SubscriptionResource insertSubscription(SubscriptionResource subscriptionResource) {
 	public Response insertSubscription(SubscriptionResource subscriptionResource) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
-//		return subscriptionResource;
+		try {
+			if(subscriptionResource.getCallbackUrl() != null && subscriptionResource.getCollection() != null) {
+				pm.makePersistent(subscriptionResource);
+				
+			} else {
+				return Response.status(400).build();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		} finally {
+			pm.close();
+		}
+		
 		return Response.ok(subscriptionResource).build();
 	}
 	
 	// list -> https://developers.google.com/glass/v1/reference/subscriptions/list
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-//	public SubscriptionsList listSubscriptionResources() {
 	public Response listSubscriptionResources() {
 		SubscriptionResource[] subscriptionResourceList = new SubscriptionResource[2];
 		
@@ -56,20 +67,16 @@ public class SubscriptionService {
 		SubscriptionsList subscriptionsList = new SubscriptionsList();
 		subscriptionsList.setItems(subscriptionResourceList);
 		
-//		return subscriptionsList;
 		return Response.ok(subscriptionsList).build();
 	}
 	
 	// update -> https://developers.google.com/glass/v1/reference/subscriptions/update
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("{id}")
-//	public SubscriptionResource updateSubscriptionResource(@PathParam("id") String id, SubscriptionResource subscriptionResource) {
+	@Path("/{id}")
 	public Response updateSubscriptionResource(@PathParam("id") String id, SubscriptionResource subscriptionResource) {
 		subscriptionResource.setId(id);
 		
-//		return subscriptionResource;
 		return Response.ok(subscriptionResource).build();
 	}
-	
 }

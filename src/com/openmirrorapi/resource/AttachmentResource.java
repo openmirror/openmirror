@@ -1,11 +1,19 @@
 package com.openmirrorapi.resource;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+@PersistenceCapable
 public class AttachmentResource {
 
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private String id;
-	private String contentType;
-	private String contentUrl;
-	private Boolean isProcessingContent;
+	@Persistent private String contentType;
+	@Persistent private String contentUrl;
+	@Persistent private Boolean isProcessingContent;
 	
 	public String getId() {
 		return id;

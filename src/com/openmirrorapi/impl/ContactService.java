@@ -21,10 +21,8 @@ public class ContactService {
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
-//	public String deleteContactResource(@PathParam("id") String id) {
 	public Response deleteContactResource(@PathParam("id") String id) {
 
-//		return "@DELETE - id["+ id +"]";
 		return Response.ok().build();
 	}
 	
@@ -32,12 +30,10 @@ public class ContactService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
-//	public ContactResource getContactResource(@PathParam("id") String id) {
 	public Response getContactResource(@PathParam("id") String id) {
 		ContactResource contactResource = new ContactResource();
 		contactResource.setId(id);
 		
-//		return contactResource;
 		return Response.ok(contactResource).build();
 	}
 	
@@ -45,17 +41,14 @@ public class ContactService {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-//	public ContactResource insertContactResource(ContactResource contactResource) {
 	public Response insertContactResource(ContactResource contactResource) {
 		
-//		return contactResource;
 		return Response.ok(contactResource).build();
 	}
 	
 	// list -> https://developers.google.com/glass/v1/reference/contacts/list
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-//	public ContactsList listContactResources() {
 	public Response listContactResources() {
 		ContactResource[] contactResourcesList = new ContactResource[2];
 		
@@ -70,7 +63,6 @@ public class ContactService {
 		ContactsList contactsList = new ContactsList();
 		contactsList.setItems(contactResourcesList);
 		
-//		return contactsList;
 		return Response.ok(contactsList).build();
 	}
 	
@@ -89,11 +81,9 @@ public class ContactService {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
-//	public ContactResource updateContactResource(@PathParam("id") String id, ContactResource contactResource) {
 	public Response updateContactResource(@PathParam("id") String id, ContactResource contactResource) {
 		contactResource.setId(id);
 		
-//		return contactResource;
 		return Response.ok(contactResource).build();
 	}
 	

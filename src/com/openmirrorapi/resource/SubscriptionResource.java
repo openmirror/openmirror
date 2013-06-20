@@ -2,17 +2,29 @@ package com.openmirrorapi.resource;
 
 import java.util.Date;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.datastore.Key;
+
+@PersistenceCapable
 public class SubscriptionResource {
 
-	private String kind = "mirror#subscription";
-	private String id;
-	private Date updated;
-	private String collection;
-	private String[] operation;
-	private String callbackUrl;
-	private String verifyToken;
-	private String userToken;
-	private SubscriptionNotificationResource notification;
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Key KEY; 
+
+	@Persistent private String kind = "mirror#subscription";
+	@Persistent private String id;
+	@Persistent private Date updated;
+	@Persistent private String collection;
+	@Persistent private String[] operation;
+	@Persistent private String callbackUrl;
+	@Persistent private String verifyToken;
+	@Persistent private String userToken;
+	@Persistent private SubscriptionNotificationResource notification;
 	
 	public String getKind() {
 		return kind;

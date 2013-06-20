@@ -1,13 +1,25 @@
 package com.openmirrorapi.resource;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.datastore.Key;
+
+@PersistenceCapable
 public class SubscriptionNotificationResource {
 
-	private String collection;
-	private String itemId;
-	private String operation;
-	private UserActionResource[] userActions;
-	private String verifyToken;
-	private String userToken;
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Key KEY;
+	
+	@Persistent private String collection;
+	@Persistent private String itemId;
+	@Persistent private String operation;
+	@Persistent private UserActionResource[] userActions;
+	@Persistent private String verifyToken;
+	@Persistent private String userToken;
 	
 	public String getCollection() {
 		return collection;

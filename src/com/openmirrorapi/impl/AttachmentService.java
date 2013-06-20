@@ -1,5 +1,6 @@
 package com.openmirrorapi.impl;
 
+import javax.jdo.PersistenceManager;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.Response;
 
 import com.openmirrorapi.resource.AttachmentResource;
 import com.openmirrorapi.resource.AttachmentsList;
+import com.openmirrorapi.server.db.PMF;
 
 @Path("/timeline/{itemId}/attachments")
 public class AttachmentService {
@@ -20,12 +22,10 @@ public class AttachmentService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{attachmentId}")
-//	public AttachmentResource getAttachmentResource(@PathParam("itemId") String itemId, @PathParam("attachmentId") String attachmentId) {
 	public Response getAttachmentResource(@PathParam("itemId") String itemId, @PathParam("attachmentId") String attachmentId) {
 		AttachmentResource attachmentResource = new AttachmentResource();
 		attachmentResource.setId(attachmentId);
 		
-//		return attachmentResource;
 		return Response.ok(attachmentResource).build();
 	}
 	
@@ -34,7 +34,6 @@ public class AttachmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{attachmentId}")
 	public Response deleteAttachmentResource(@PathParam("itemId") String itemId, @PathParam("attachmentId") String attachmentId) {
-//		return "@DELETE - itemId["+ itemId +"] - attachmentId["+ attachmentId +"]";
 		
 		return Response.ok().build();
 	}
@@ -42,19 +41,28 @@ public class AttachmentService {
 	// insert -> https://developers.google.com/glass/v1/reference/timeline/attachments/insert
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-//	public AttachmentResource insertAttachment(@PathParam("itemId") String itemId, @QueryParam("uploadType") String uploadType) {
 	public Response insertAttachment(@PathParam("itemId") String itemId, @QueryParam("uploadType") String uploadType) {	
-		AttachmentResource attachmentResource = new AttachmentResource();
-		attachmentResource.setContentType(uploadType);
+		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
-//		return attachmentResource;
+		AttachmentResource attachmentResource = new AttachmentResource();
+		
+		try{
+			attachmentResource.setContentType(uploadType);
+			
+			pm.makePersistent(attachmentResource);
+			
+		} catch (Exception e) {
+			return Response.serverError().build();
+		} finally {
+			pm.close();
+		}
+		
 		return Response.ok(attachmentResource).build();
 	}
 	
 	// list -> https://developers.google.com/glass/v1/reference/timeline/attachments/list
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-//	public AttachmentsList listAttachmentResources(@PathParam("itemId") String itemId) {
 	public Response listAttachmentResources(@PathParam("itemId") String itemId) {
 		AttachmentResource[] attachmentResourceList = new AttachmentResource[2];
 		
@@ -69,7 +77,6 @@ public class AttachmentService {
 		AttachmentsList attachmentsList = new AttachmentsList();
 		attachmentsList.setItems(attachmentResourceList);
 		
-//		return attachmentsList;
 		return Response.ok(attachmentsList).build();
 	}
 }
