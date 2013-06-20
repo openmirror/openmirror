@@ -1,6 +1,9 @@
 package com.openmirrorapi.impl;
 
+import java.util.List;
+
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -23,7 +26,24 @@ public class SubscriptionService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
 	public Response deleteSubscriptionResource(@PathParam("id") String id) {
-
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		
+		try {
+			
+			Query query = pm.newQuery(SubscriptionResource.class, "id == :id");
+			query.setRange(0, 1);
+			List<SubscriptionResource> results = (List<SubscriptionResource>)query.execute(id);
+			
+			if(results.size() > 0)
+				pm.deletePersistent(results.get(0));
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		} finally {
+			pm.close();
+		}
+		
 		return Response.ok().build();
 	}
 
@@ -54,18 +74,32 @@ public class SubscriptionService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listSubscriptionResources() {
-		SubscriptionResource[] subscriptionResourceList = new SubscriptionResource[2];
-		
-		SubscriptionResource subscriptionResource = new SubscriptionResource();
-		subscriptionResource.setId("subscription#1");
-		subscriptionResourceList[0] = subscriptionResource;
-		
-		SubscriptionResource subscriptionResource2 = new SubscriptionResource();
-		subscriptionResource2.setId("subscription#2");
-		subscriptionResourceList[1] = subscriptionResource2;
+		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
 		SubscriptionsList subscriptionsList = new SubscriptionsList();
-		subscriptionsList.setItems(subscriptionResourceList);
+		
+		try {			
+			
+			Query query = pm.newQuery(SubscriptionResource.class);
+			List<SubscriptionResource> results = (List<SubscriptionResource>)query.execute();
+			
+			SubscriptionResource[] subscriptionResources = new SubscriptionResource[results.size()];
+			int i = 0;
+			for(SubscriptionResource subscriptionResource : results) {
+			
+				subscriptionResources[i] = subscriptionResource;
+				
+				i++;
+			}	
+			
+			subscriptionsList.setItems(subscriptionResources);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		} finally {
+			pm.close();
+		}
 		
 		return Response.ok(subscriptionsList).build();
 	}
