@@ -22,9 +22,7 @@ public class TimelineService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
-//	public TimelineResource getTimelineItem(@PathParam("id") String id) {
 	public Response getTimelineItem(@PathParam("id") String id) {
-//		return new TimelineResource(id);
 		
 		TimelineResource timelineResource = new TimelineResource();
 		timelineResource.setId(id);
@@ -36,9 +34,7 @@ public class TimelineService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-//	public TimelineResource postTimelineItem(TimelineResource timelineResource) {
 	public Response postTimelineItem(TimelineResource timelineResource) {
-//		return timelineResource;
 		
 		return Response.ok(timelineResource).build();
 	}
@@ -47,16 +43,14 @@ public class TimelineService {
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
-//	public String deleteTimelineItem(@PathParam("id") String id) {
 	public Response deleteTimelineItem(@PathParam("id") String id) {
-//		return "Hello World!";
+
 		return Response.ok().build();
 	}
 
 	// list -> https://developers.google.com/glass/v1/reference/timeline/list
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-//	public String getTimeline() {
 	public Response getTimeline() {
 		TimelineResource[] timelineResourcesList = new TimelineResource[2];
 		
@@ -87,7 +81,6 @@ public class TimelineService {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
-//	public String updateTimelineItem(@PathParam("id") String id, TimelineResource timelineResource) {
 	public Response updateTimelineItem(@PathParam("id") String id, TimelineResource timelineResource) {
 		timelineResource.setId(id);
 		
