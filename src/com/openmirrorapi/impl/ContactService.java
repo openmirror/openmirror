@@ -1,5 +1,9 @@
 package com.openmirrorapi.impl;
 
+import java.util.List;
+
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -13,6 +17,9 @@ import javax.ws.rs.core.Response;
 
 import com.openmirrorapi.resource.ContactResource;
 import com.openmirrorapi.resource.ContactsList;
+import com.openmirrorapi.resource.SubscriptionResource;
+import com.openmirrorapi.resource.SubscriptionsList;
+import com.openmirrorapi.server.db.PMF;
 
 @Path("/contacts")
 public class ContactService {
@@ -22,6 +29,24 @@ public class ContactService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
 	public Response deleteContactResource(@PathParam("id") String id) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		
+		try {
+			Query query = pm.newQuery(ContactResource.class);
+			query.setFilter("id == :id");
+			query.setRange(0, 1);
+			
+			List<ContactResource> results = (List<ContactResource>)query.execute(id);
+			
+			if(results.size() > 0)
+				pm.deletePersistent(results.get(0));
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		} finally {
+			pm.close();
+		}
 
 		return Response.ok().build();
 	}
@@ -31,10 +56,26 @@ public class ContactService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
 	public Response getContactResource(@PathParam("id") String id) {
-		ContactResource contactResource = new ContactResource();
-		contactResource.setId(id);
+		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
-		return Response.ok(contactResource).build();
+		try {
+			Query query = pm.newQuery(ContactResource.class);
+			query.setFilter("id == :id");
+			query.setRange(0, 1);
+			
+			List<ContactResource> results = (List<ContactResource>)query.execute(id);
+			
+			if(results.size() > 0)
+				return Response.ok(results.get(0)).build();
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		} finally {
+			pm.close();
+		}
+
+		return Response.ok().build();
 	}
 	
 	// insert -> https://developers.google.com/glass/v1/reference/contacts/insert
@@ -42,6 +83,17 @@ public class ContactService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response insertContactResource(ContactResource contactResource) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		
+		try {
+			pm.makePersistent(contactResource);
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		} finally {
+			pm.close();
+		}
 		
 		return Response.ok(contactResource).build();
 	}
@@ -50,18 +102,32 @@ public class ContactService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listContactResources() {
-		ContactResource[] contactResourcesList = new ContactResource[2];
-		
-		ContactResource contactResource = new ContactResource();
-		contactResource.setId("contact#1");
-		contactResourcesList[0] = contactResource;
-		
-		ContactResource contactResource2 = new ContactResource();
-		contactResource2.setId("contact#2");
-		contactResourcesList[1] = contactResource2;
+		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
 		ContactsList contactsList = new ContactsList();
-		contactsList.setItems(contactResourcesList);
+		
+		try {			
+			
+			Query query = pm.newQuery(ContactResource.class);
+			List<ContactResource> results = (List<ContactResource>)query.execute();
+			
+			ContactResource[] contactResources = new ContactResource[results.size()];
+			int i = 0;
+			for(ContactResource contactResource : results) {
+			
+				contactResources[i] = contactResource;
+				
+				i++;
+			}	
+			
+			contactsList.setItems(contactResources);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		} finally {
+			pm.close();
+		}
 		
 		return Response.ok(contactsList).build();
 	}
@@ -82,9 +148,35 @@ public class ContactService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
 	public Response updateContactResource(@PathParam("id") String id, ContactResource contactResource) {
-		contactResource.setId(id);
+		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
-		return Response.ok(contactResource).build();
+		try {
+			Query query = pm.newQuery(ContactResource.class);
+			query.setFilter("id == :id");
+			query.setRange(0, 1);
+			
+			List<ContactResource> results = (List<ContactResource>)query.execute(id);
+			
+			if(results.size() > 0) {
+				ContactResource contactResourceDB = results.get(0);
+				
+				contactResourceDB.setSource(contactResource.getSource());
+				contactResourceDB.setDisplayName(contactResource.getDisplayName());
+				contactResourceDB.setImageUrls(contactResource.getImageUrls());
+				contactResourceDB.setType(contactResource.getType());
+				contactResourceDB.setAcceptTypes(contactResource.getAcceptTypes());
+				contactResourceDB.setPhoneNumber(contactResource.getPhoneNumber());
+				contactResourceDB.setPriority(contactResource.getPriority());
+			}
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		} finally {
+			pm.close();
+		}
+
+		return Response.ok().build();
 	}
 	
 }

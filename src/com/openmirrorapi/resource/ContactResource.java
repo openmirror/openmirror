@@ -1,16 +1,28 @@
 package com.openmirrorapi.resource;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.datastore.Key;
+
+@PersistenceCapable
 public class ContactResource {
 
-	private String kind = "mirror#contact";
-	private String source;
-	private String id;
-	private String displayName;
-	private String[] imageUrls;
-	private String type;
-	private String[] acceptTypes;
-	private String phoneNumber;
-	private Integer priority; // unsigned
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Key KEY;
+	
+	@Persistent private String kind = "mirror#contact";
+	@Persistent private String source;
+	@Persistent private String id;
+	@Persistent private String displayName;
+	@Persistent private String[] imageUrls;
+	@Persistent private String type;
+	@Persistent private String[] acceptTypes;
+	@Persistent private String phoneNumber;
+	@Persistent private Integer priority; // unsigned
 	
 	public String getKind() {
 		return kind;
